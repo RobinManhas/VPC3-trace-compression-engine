@@ -58,34 +58,39 @@ int compress_one_file(char *infilename, char *outfilename)
 
 int main() {
     //robin:
-    char orig[150] = "/Users/robinmanhas/Desktop/VPC3/src/testconfig.txt";
-    char orig2[150] = "/Users/robinmanhas/Desktop/VPC3/src/testresconfig.txt";
-    char zipped[150] = "/Users/robinmanhas/Desktop/VPC3/src/testconfig.zlib";
-    cout << "Start from main\n";
-    TraceConfig* cfg = parseFile("/Users/robinmanhas/Desktop/VPC3/src/testconfig.txt");
-    cout<<"end, ID: "<< cfg->getPCField()[0]->iFieldLen; // just for test, use this by getting vector appropriately
-
-    compress_one_file(orig,zipped);
-    decompress_one_file(zipped,orig2);
+    char orig[150] = "/Users/shweta/Documents/Masters@StonyBrook/Fall2017/CSE506-OS/VPC3/src/testconfig.txt";
+    char orig2[150] = "/Users/shweta/Documents/Masters@StonyBrook/Fall2017/CSE506-OS/VPC3/src/testresconfig.txt";
+    char zipped[150] = "/Users/shweta/Documents/Masters@StonyBrook/Fall2017/CSE506-OS/VPC3/src/testconfig.zlib";
 
 
+    TraceConfig* cfg = parseFile("/Users/shweta/Documents/Masters@StonyBrook/Fall2017/CSE506-OS/VPC3/src/testconfig.txt");
 
-    cout << "Hello, World!vvvvvvv";
-    VPC3 vpc3;
-    int noOfFields = 2;
+    cout<<"end, ID: "<< cfg->getFields()[0]->iFieldLen; // just for test, use this by getting vector appropriately
+
+    //compress_one_file(orig,zipped);
+    //decompress_one_file(zipped,orig2);
+
+
+
     ifstream fstr("/Users/shweta/Documents/Masters@StonyBrook/Fall2017/CSE506-OS/VPC3/cmake-build-debug/test.trace",std::ios::binary);
     if(!fstr) {
         cout << "Cannot open input file.\n";
         return 0;
     }
-    vpc3.encode(fstr);
+
+    VPC3 vpc3;
+
+
+    vpc3.encode(fstr,cfg);
+
+    int noOfFields = cfg->getFields().size();
     ifstream streams[2*noOfFields];
     for(int i = 0; i< 2*noOfFields; i++) {
         string suffix = "stream";
         suffix.append(1,i+'0');
         streams[i].open(suffix);
     }
-    vpc3.decode(streams);
+    vpc3.decode(streams,cfg);
 
 //    while(!fstr.eof()) {
 //        buffer = new char[4];

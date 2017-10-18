@@ -9,15 +9,11 @@ int TraceConfig::setHeader(int h){
 }
 
 
-int TraceConfig::addPCField(FieldInfo* info){
-    vPCField.push_back(info);
+int TraceConfig::addField(FieldInfo* info){
+    fields.push_back(info);
     return 0;
 }
 
-int TraceConfig::addEDField(FieldInfo* info){
-    vEDField.push_back(info);
-    return 0;
-}
 
 int TraceConfig::setID(string ID){
     iID = ID;
@@ -29,14 +25,8 @@ int TraceConfig::getHeader(){
 }
 
 
-vector<FieldInfo*> TraceConfig::getPCField(){
-    return vPCField;
-}
-
-
-
-vector<FieldInfo*> TraceConfig::getEDField(){
-    return vEDField;
+vector<FieldInfo*> TraceConfig::getFields(){
+    return fields;
 }
 
 string TraceConfig::getID(){
@@ -53,16 +43,12 @@ int TraceConfig::unref(){ // RM: banker
     if(iRefCount == 0){
         cout << "Refcount for TraceConfig became 0, deleting input" << endl;
         vector<FieldInfo*>::iterator it;
-        for(it = vPCField.begin(); it != vPCField.end(); it++){
+        for(it = fields.begin(); it != fields.end(); it++){
             if(*it){
                 delete(*it);
             }
         }
-        for(it = vEDField.begin(); it != vEDField.end(); it++){
-            if(*it){
-                delete(*it);
-            }
-        }
+
         delete this;
     }
     return 0;

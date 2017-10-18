@@ -25,20 +25,17 @@ class TraceConfig{
 private:
     int iRefCount;
     int iHeaderLen;
-    vector<FieldInfo*> vPCField;
-    vector<FieldInfo*> vEDField;
+    vector<FieldInfo*> fields;
     string iID;
 public:
     int ref();
     int unref();
     int setHeader(int h);
-    int addPCField(FieldInfo* info);
-    int addEDField(FieldInfo* info);
+    int addField(FieldInfo* info);
     int setID(string ID);
 
     int getHeader();
-    vector<FieldInfo*> getPCField();
-    vector<FieldInfo*> getEDField();
+    vector<FieldInfo*> getFields();
     string getID();
 };
 #endif //VPC3_CONFIGURATION_H

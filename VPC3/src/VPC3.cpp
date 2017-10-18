@@ -114,7 +114,7 @@ void VPC3::prepare() {
 /*
  * takes two streams ;
  */
-void VPC3::decodeStreams(ifstream streams[]){//string to be replaced by streams
+void VPC3::decodeStreams(ifstream streams[],TraceConfig* cfg){//string to be replaced by streams
     cout<<"inside decode"<<endl;
     int i = 0;
     int j = 0;
@@ -125,7 +125,7 @@ void VPC3::decodeStreams(ifstream streams[]){//string to be replaced by streams
 //    int size = 0;
     file.open ("output.txt");
     file << "Output trace\n";
-
+    int noOfFields = cfg->getFields().size();
 
     int predictorId;
     char* data;
@@ -133,7 +133,8 @@ void VPC3::decodeStreams(ifstream streams[]){//string to be replaced by streams
     uint64 data8;
     do {
         for (int i = 0; i < noOfFields; i++) {
-            switch (sizes[i]) {
+            int size = cfg->getFields()[i]->iFieldLen/8;
+            switch (size) {
                 case 4:
                     //cout<<"in 4 "<<endl;
                     //predictorId = stream1[i1++]- '0';
@@ -143,8 +144,8 @@ void VPC3::decodeStreams(ifstream streams[]){//string to be replaced by streams
                         if(predictorId == totalpredictors[i]){
                             //read from stream2
                             //cout<<i2<<endl;
-                            data4 = readBytes<uint32_t>(streams[2*i+1],sizes[i]);
-                            data = convertToChar<uint32_t>(data4,sizes[i]);
+                            data4 = readBytes<uint32_t>(streams[2*i+1],size);
+                            data = convertToChar<uint32_t>(data4,size);
 //                            strcat(buffer,data);
 //                            size+=sizes[i];
                             file<<data;
@@ -155,7 +156,7 @@ void VPC3::decodeStreams(ifstream streams[]){//string to be replaced by streams
                             cout<<"4: take value from predictor id: "<<predictorId<<endl;
                             data4 = getValueFromPredictor<uint32_t>((Predictor<uint32_t> **)predictorsListofLists[i],predictorId);
                             cout<<"value from predictor: "<<data4<<endl;
-                            file<<convertToChar<uint32_t>(data4,sizes[i]);
+                            file<<convertToChar<uint32_t>(data4,size);
 //                            data=convertToChar<uint32_t>(data4,sizes[i]);
 //                            strcat(buffer,data);
 //                            size+=sizes[i];
@@ -168,8 +169,8 @@ void VPC3::decodeStreams(ifstream streams[]){//string to be replaced by streams
                     predictorId = readBytes<char>(streams[2*i],1)-'0';
                     if(predictorId>=0) {
                         if (predictorId == totalpredictors[i]) {
-                            data8 = readBytes<uint64>(streams[2*i+1],sizes[i]);
-                            data = convertToChar<uint64>(data8,sizes[i]);
+                            data8 = readBytes<uint64>(streams[2*i+1],size);
+                            data = convertToChar<uint64>(data8,size);
 //                            strcat(buffer,data);
 //                            size+=sizes[i];
                             file<<data;
@@ -179,7 +180,7 @@ void VPC3::decodeStreams(ifstream streams[]){//string to be replaced by streams
                             //take value from predictor
                             data8 = getValueFromPredictor<uint64>((Predictor<uint64> **) predictorsListofLists[i],
                                                                   predictorId);
-                            file << convertToChar<uint64>(data8, sizes[i]);
+                            file << convertToChar<uint64>(data8, size);
 //                            data=convertToChar<uint64>(data8, sizes[i]);
 //                            strcat(buffer,data);
 //                            size+=sizes[i];
@@ -220,18 +221,19 @@ T VPC3::getValueFromPredictor(Predictor<T>* predictors[], int predictorId){
         return predictors[predictorId]->getPrediction();
 }
 
-void VPC3::decode(ifstream streams[]){
+void VPC3::decode(ifstream streams[],TraceConfig* cfg){
     prepare();
 
-    decodeStreams(streams);
+    decodeStreams(streams,cfg);
     //decodeStreams(idStream,dataStream);
 
 }
 
-void VPC3::encode(ifstream& fstr){
+void VPC3::encode(ifstream& fstr,TraceConfig* cfg){
     //predictors initialisation
     prepare();
 
+    int noOfFields = cfg->getFields().size();
     //initialising 2 streams for each field
     ofstream streams[2*noOfFields];
     for(int i = 0; i< 2*noOfFields; i++) {
@@ -246,14 +248,15 @@ void VPC3::encode(ifstream& fstr){
     char *tmp;
     do {
         for (int i = 0; i < noOfFields; i++) {
-            switch (sizes[i]) {
+            int size = cfg->getFields()[i]->iFieldLen/8;
+            switch (size) {
                 /*
                  * size[i] read from file
                  * predictorsListofLists[i] list of predictors
                  */
                 case 4:
 
-                    data4 = readBytes<uint32_t>(fstr,sizes[i]);
+                    data4 = readBytes<uint32_t>(fstr,size);
                     if(data4 == NULL)
                         break;
                     predictorId =    findCorrectPredictor<uint32_t>(data4, totalpredictors[i],
@@ -266,7 +269,7 @@ void VPC3::encode(ifstream& fstr){
 
                     if(predictorId == totalpredictors[i]){
                         //write in stream2
-                        tmp = convertToChar<uint32_t>(data4,sizes[i]);
+                        tmp = convertToChar<uint32_t>(data4,size);
                         cout<<"4: not able to predict: "<<tmp<<endl;
                         //stream2<<tmp;
                         streams[2*i+1]<<tmp;
@@ -277,7 +280,7 @@ void VPC3::encode(ifstream& fstr){
 
                     break;
                 case 8:
-                    data8 = readBytes<uint64>(fstr,sizes[i]);
+                    data8 = readBytes<uint64>(fstr,size);
                     if(data8 == NULL)
                         break;
                      predictorId = findCorrectPredictor<uint64>(data8, totalpredictors[i],
@@ -287,7 +290,7 @@ void VPC3::encode(ifstream& fstr){
                     streams[2*i]<<predictorId;
                     if(predictorId == totalpredictors[i]){
                         //write in stream4
-                        tmp = convertToChar<uint64>(data8,sizes[i]);
+                        tmp = convertToChar<uint64>(data8,size);
                         cout<<"8: not able to predict: "<<tmp<<endl;
                         //stream4<<tmp;
                         streams[2*i+1]<<tmp;

@@ -3,6 +3,7 @@
 //
 
 #include "InputConfigReader.h"
+#include "main.h"
 
 int convertToInt(string data){ // RM: In case atoi or c_str not supported, write implementation here
     return atoi(data.c_str());
@@ -140,20 +141,14 @@ TraceConfig* parseFile(string fpath){
             }
 
             if(!predictorFound){
-                f->mPredictorMap.insert(make_pair("DFCM3", 2));
-                f->mPredictorMap.insert(make_pair("FCM3", 2));
-                f->mPredictorMap.insert(make_pair("LV", 2));
+                //f->mPredictorMap.insert(make_pair(DFCM3, 2));
+                f->mPredictorMap.insert(make_pair(FCM3, 2));
+                f->mPredictorMap.insert(make_pair(LV, 2));
             }
 
-            // update field length
-            if(val == 32){ // PC
-                f->iFieldLen = 32;
-                config->addPCField(f);
-            }
-            else if(val == 64){ // ED
-                f->iFieldLen = 64;
-                config->addEDField(f);
-            }
+            f->iFieldLen = val;
+            config->addField(f);
+
 
         }
 
