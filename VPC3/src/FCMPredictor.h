@@ -18,15 +18,15 @@ private:
     unsigned int hashTableSize;
     int id;
     char recent;
-    uint32_t maxOrder;
-    uint32_t* firstLevelTable;
+    int maxOrder;
+    int* firstLevelTable;
     T** secondLevelTable;//contains most recent value that followed the input , second recent
     unsigned int getHashValue(unsigned int value);
     static int updateFlag;
 
 public:
 
-    void initialise(uint32_t* firstLevel, T** secondLevel,unsigned int hashTableSize,unsigned int maxOrder,
+    void initialise(int* firstLevel, T** secondLevel,unsigned int hashTableSize,unsigned int maxOrder,
                     unsigned int order,char recent,int id);
     T getPrediction();
     void update(const T newValue);

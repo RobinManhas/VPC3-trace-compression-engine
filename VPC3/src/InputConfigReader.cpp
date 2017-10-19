@@ -36,6 +36,7 @@ TraceConfig* parseFile(string fpath){
         else if(lbuf.find("Bit Field") != string::npos){
             int val = convertToInt(lbuf.substr(0,lbuf.find("-")));
             predictorFound = 0;
+            int totalPredictors=0;
             FieldInfo* f = new FieldInfo();
 
             // getting field ID
@@ -70,6 +71,7 @@ TraceConfig* parseFile(string fpath){
 
             // getting L2
             first = lbuf.find("L2 = ");
+            first+=5;
             last = lbuf.find(":",0);
             if(first >=0 && last >= 0){
             string strNew = lbuf.substr (first,last-first);
@@ -98,7 +100,7 @@ TraceConfig* parseFile(string fpath){
                         //cout << "Predictor: "<<strNew<<endl;
 
                         // split predictor name and count
-                        int namestart = 0;
+                        int namestart = 1;
                         int namend = strNew.find("[",0);
                         string name = strNew.substr (namestart,namend-namestart);
                         namestart = namend+1;
@@ -106,6 +108,7 @@ TraceConfig* parseFile(string fpath){
                         int value = convertToInt(strNew.substr (namestart,namend-namestart));
 
                         f->mPredictorMap.insert(make_pair(name, value));
+                        totalPredictors += value;
                         cout <<"Predictor added to map,name: "<<name<<" ,val "<<value<<endl;
                         predictorStr.erase(0,strNew.length()+1);
                         predictorFound = 1;
@@ -134,6 +137,7 @@ TraceConfig* parseFile(string fpath){
                     int value = convertToInt(strNew.substr (namestart,namend-namestart));
 
                     f->mPredictorMap.insert(make_pair(name, value));
+                    totalPredictors += value;
                     cout <<"Predictor added to map,name: "<<name<<" ,val "<<value<<endl;
                     predictorStr.erase(0,strNew.length()+1);
                     predictorFound = 1;
@@ -147,6 +151,7 @@ TraceConfig* parseFile(string fpath){
             }
 
             f->iFieldLen = val;
+            f->totalPredictors=totalPredictors;
             config->addField(f);
 
 

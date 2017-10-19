@@ -92,14 +92,5 @@ int main() {
     }
     vpc3.decode(streams,cfg);
 
-//    while(!fstr.eof()) {
-//        buffer = new char[4];
-//        //fstr.read(reinterpret_cast<char*>(&myint), sizeof(int));
-//        fstr.read(buffer,4);
-//        cout<<"loop: "<< buffer<<endl;
-//    }
-    //fstr.read(reinterpret_cast<char*>(&myint), sizeof(int));
-    //vpc3.execute();
-    cout<<"end";
     return 0;
 }

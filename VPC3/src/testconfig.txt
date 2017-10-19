@@ -1,5 +1,5 @@
 TCgen Trace Specification;
 0-Bit Header;
 32-Bit Field 1 = {L1 = 1,L2 = 131072:FCM3[2],FCM1[2]};
-64-Bit Field 2 = {L1 = 65536,L2 = 131072:FCM1[2],ST[2],LV[4]};
+64-Bit Field 2 = {L1 = 65536,L2 = 131072:FCM1[2],LV[4]};
 ID = Field 1;

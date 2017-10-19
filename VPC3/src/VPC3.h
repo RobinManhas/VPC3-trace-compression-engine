@@ -5,8 +5,6 @@
 #ifndef NEW_VPC3_H
 #define NEW_VPC3_H
 
-
-
 #include "Predictor.h"
 #include "Configuration.h"
 #include <fstream>
@@ -14,17 +12,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 using namespace std;
 class VPC3 {
 
 private:
-//	unsigned static int const noOfFields = 2;//input
-	void **predictorsListofLists[2];    // 2 sets of predictors one for PC and one for ED
-//	int sizes[noOfFields] = {4, 8}; // from input
-	unsigned short totalpredictors[2]={4,6};  // 4 predictors for PC and 6 for ED
-    int test();
+    void ***predictorsListofLists;    // to be
 
-    void prepare();
+
+    void preparePredictors(TraceConfig* cfg);
 
     template<typename T>
     int findCorrectPredictor(const T value,unsigned int noOfPredictors,Predictor<T>* predictors[]);
@@ -38,17 +34,27 @@ private:
     template<typename T>
     T convertToT(const char* buffer, int noOfBytes);
 
-
-
-    void decodeStreams(ifstream streams[],TraceConfig* cfg);
-
-
     template<typename T>
     void updatePredictors(Predictor<T>* predictors[],T value,int noOfPredictors);
 
     template<typename T>
     T getValueFromPredictor(Predictor<T>* predictors[], int predictorId);
 
+
+    template <typename T>
+    int getLVPredictors(int countOfpredictor, Predictor<T> **predictors,int id);
+
+    template <typename T>
+    int getFCMPredictors(Predictor<T> **predictors,int id, int const hashTableSize,map<string, int> fcmOrderMap);
+
+    template <typename T>
+    Predictor<T> ** assignPredictors(TraceConfig* cfg,int i);
+
+    template <typename T>
+    T encodePredictions(ifstream& fstr,TraceConfig* cfg, int i,int size,ofstream streams[]);
+
+    template<typename T>
+    T decodePredictions(ifstream streams[],TraceConfig* cfg, int i, int size,ofstream& file);
 
 public:
     void encode(ifstream& fstr,TraceConfig* cfg);

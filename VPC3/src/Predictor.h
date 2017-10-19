@@ -18,7 +18,7 @@ template<class T>
 
     };
 
-//#include "Predictor.cpp"
+
 
 
 #endif //NEW_PREDICTOR_H

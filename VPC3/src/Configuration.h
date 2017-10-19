@@ -19,6 +19,8 @@ public:
     int iL1;
     int iL2;
     map <string,int> mPredictorMap;
+    int totalPredictors;
+
 };
 
 class TraceConfig{

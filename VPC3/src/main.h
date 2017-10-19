@@ -7,10 +7,11 @@
 
 
 using namespace std;
-static const int n = 2;
+
 static const string LV = "LV";
 static const string FCM1="FCM1";
 static const string FCM3="FCM3";
+typedef unsigned long uint64 ;
 
 
 
