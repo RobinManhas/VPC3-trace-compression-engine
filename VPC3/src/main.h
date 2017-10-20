@@ -11,6 +11,8 @@ using namespace std;
 static const string LV = "LV";
 static const string FCM1="FCM1";
 static const string FCM3="FCM3";
+static const string DFCM1="DFCM1";
+static const string DFCM3="DFCM3";
 typedef unsigned long uint64 ;
 
 

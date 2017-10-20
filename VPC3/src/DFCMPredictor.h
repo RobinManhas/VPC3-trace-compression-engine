@@ -1,16 +1,17 @@
 //
-// Created by Shweta Sahu on 10/3/17.
+// Created by Shweta Sahu on 10/19/17.
 //
 
-#ifndef NEW_FCMPREDICTOR_H
-#define NEW_FCMPREDICTOR_H
+#ifndef VPC3_DFCMPREDICTOR_H
+#define VPC3_DFCMPREDICTOR_H
 
+#include <stdio.h>
 #include "main.h"
 #include "Predictor.h"
 
 using namespace std;
 template<class T>
-class FCMPredictor: public Predictor<T>{
+class DFCMPredictor: public Predictor<T>{
 private:
     unsigned int usageCount;
     unsigned int order;
@@ -36,5 +37,4 @@ public:
 };
 
 
-
-#endif //NEW_FCMPREDICTOR_H
+#endif //VPC3_DFCMPREDICTOR_H

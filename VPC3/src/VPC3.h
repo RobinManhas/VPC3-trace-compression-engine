@@ -48,6 +48,9 @@ private:
     int getFCMPredictors(Predictor<T> **predictors,int id, int const hashTableSize,map<string, int> fcmOrderMap);
 
     template <typename T>
+    int getDFCMPredictors(Predictor<T> *predictors[],int id, int const hashTableSize,map<string, int> dfcmOrderMap);
+
+        template <typename T>
     Predictor<T> ** assignPredictors(TraceConfig* cfg,int i);
 
     template <typename T>

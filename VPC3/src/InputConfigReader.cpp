@@ -84,7 +84,8 @@ TraceConfig* parseFile(string fpath){
             }
 
             // getting list of predictors
-            first = lbuf.find(":",2);
+            first = lbuf.find(":",1);
+            first+=1;
             last = lbuf.find("}",0);
             if(first >=0 && last >= 0){
                 string predictorStr = lbuf.substr (first,(last+1)-first);
@@ -100,7 +101,7 @@ TraceConfig* parseFile(string fpath){
                         //cout << "Predictor: "<<strNew<<endl;
 
                         // split predictor name and count
-                        int namestart = 1;
+                        int namestart = 0;
                         int namend = strNew.find("[",0);
                         string name = strNew.substr (namestart,namend-namestart);
                         namestart = namend+1;
@@ -145,9 +146,9 @@ TraceConfig* parseFile(string fpath){
             }
 
             if(!predictorFound){
-                //f->mPredictorMap.insert(make_pair(DFCM3, 2));
+                f->mPredictorMap.insert(make_pair(DFCM3, 2));
                 f->mPredictorMap.insert(make_pair(FCM3, 2));
-                f->mPredictorMap.insert(make_pair(LV, 2));
+                f->mPredictorMap.insert(make_pair(LV, 4));
             }
 
             f->iFieldLen = val;

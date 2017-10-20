@@ -2,21 +2,21 @@
 // Created by Shweta Sahu on 10/3/17.
 //
 #include <iostream>
-#include "FCMPredictor.h"
+#include "DFCMPredictor.h"
 
 using namespace std;
 
 
 template<class T>
-int FCMPredictor<T>::updateFlag=0;
+int DFCMPredictor<T>::updateFlag=0;
 
 template<class T>
-void FCMPredictor<T>::setUpdateFlag(){
+void DFCMPredictor<T>::setUpdateFlag(){
     updateFlag = 1;
 }
 
 template<class T>
-unsigned int FCMPredictor<T>::getHashValue(unsigned int value){
+unsigned int DFCMPredictor<T>::getHashValue(unsigned int value){
     unsigned int hashValue = 0;
     while (value > 0) {
         hashValue = (unsigned int)hashValue ^ (unsigned int)value;
@@ -29,10 +29,10 @@ unsigned int FCMPredictor<T>::getHashValue(unsigned int value){
 
 
 template<class T>
-void FCMPredictor<T>::initialise(int* firstLevel, T** secondLevel,unsigned int p_hashTableSize,unsigned int p_maxOrder,
-                              unsigned int p_order,char p_recent,int p_id){
+void DFCMPredictor<T>::initialise(int* firstLevel, T** secondLevel,unsigned int p_hashTableSize,unsigned int p_maxOrder,
+                                 unsigned int p_order,char p_recent,int p_id){
     //firsttable, secondtable,hashtablesize,maxorder,order,recent,id,
-	//cout<<"\n initialise: "<<p_hashTableSize<<"\t"<<p_maxOrder<<"\t"<<p_order<<"\t"<<p_recent<<"\t"<<p_id;
+    //cout<<"\n initialise: "<<p_hashTableSize<<"\t"<<p_maxOrder<<"\t"<<p_order<<"\t"<<p_recent<<"\t"<<p_id;
     firstLevelTable= firstLevel;
     secondLevelTable  = secondLevel;
     order = p_order;
@@ -44,26 +44,27 @@ void FCMPredictor<T>::initialise(int* firstLevel, T** secondLevel,unsigned int p
 };
 
 template<class T>
-T FCMPredictor<T>::getPrediction(){
-    unsigned int index = firstLevelTable[order-1];
+T DFCMPredictor<T>::getPrediction(){
+    unsigned int index = firstLevelTable[order];
     T value = -1;
     switch(recent){//'a' specifies most recent ang 'b': second most recent
-        case 'a' : value = secondLevelTable[index][0];break;
-        case 'b' : value =  secondLevelTable[index][1];break;
+        case 'a' : value = secondLevelTable[index][0]+firstLevelTable[0];break;  // as strides were saved, so now adding the last value
+        case 'b' : value =  secondLevelTable[index][1]+firstLevelTable[0];break;
     }
     return value;
 
 }
 
 template<class T>
-void FCMPredictor<T>::update(const T newValue)
+void DFCMPredictor<T>::update(const T newValue)
 {
     unsigned int  hashValue = getHashValue(newValue);
 
     //if(firstLevelTable[0] != hashValue){//removed
     if(updateFlag == 1){
         //cout << "inside update for FCM :"<<id<<" : "<< updateFlag<<endl;
-        for(int i=0; i<maxOrder; i++) {//need to change to maxorder
+        for(int i=1; i <= maxOrder; i++) {
+
             unsigned int index = firstLevelTable[i];
             if (secondLevelTable[index][0] != newValue) {
                 secondLevelTable[index][1] = secondLevelTable[index][0];
@@ -71,25 +72,26 @@ void FCMPredictor<T>::update(const T newValue)
             }
         }
 
-        for (int i = 2; i > 0; i--) {
-            firstLevelTable[i] = firstLevelTable[i - 1]^hashValue;
+        for (int i = maxOrder; i > 1; i--) {
+            firstLevelTable[i] = ((firstLevelTable[i - 1]+firstLevelTable[0])^hashValue)-newValue;
         }
-        firstLevelTable[0] = hashValue;
+        firstLevelTable[1] = hashValue - newValue;
+        firstLevelTable[0] = newValue;
         updateFlag = 0;
     }
 }
 
 template<class T>
-int FCMPredictor<T>::getUsageCount(){
+int DFCMPredictor<T>::getUsageCount(){
     return usageCount;
 };
 
 template<class T>
-void FCMPredictor<T>::incrementUsageCount(){
+void DFCMPredictor<T>::incrementUsageCount(){
     usageCount++;
 }
 
 template<class T>
-int FCMPredictor<T>::getPredictorId(){
+int DFCMPredictor<T>::getPredictorId(){
     return id;
 }

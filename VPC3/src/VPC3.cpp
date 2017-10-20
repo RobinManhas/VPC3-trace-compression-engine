@@ -4,9 +4,11 @@
 
 #include "VPC3.h"
 #include "FCMPredictor.h"
+#include "DFCMPredictor.h"
 #include "LVPredictor.h"
 #include "Predictor.h"
 #include "FCMPredictor.cpp"
+#include "DFCMPredictor.cpp"
 #include "LVPredictor.cpp"
 #include "main.h"
 using namespace std;
@@ -47,6 +49,10 @@ Predictor<T> ** VPC3::assignPredictors(TraceConfig* cfg,int i) {
     map<string, int> fcmOrderMap;
     int totalFCMPredictors = 0;
 
+    bool isDFCMPredictorsPresent = false;
+    map<string, int> dfcmOrderMap;
+    int totalDFCMPredictors = 0;
+
     for (it = cfg->getFields()[i]->mPredictorMap.begin(), counter = 0;
          it != cfg->getFields()[i]->mPredictorMap.end(); it++, counter++) {
 
@@ -61,11 +67,20 @@ Predictor<T> ** VPC3::assignPredictors(TraceConfig* cfg,int i) {
             string order = it->first.substr(3,1);
             fcmOrderMap.insert(make_pair(order, it->second));
             totalFCMPredictors += it->second;
+
+        }else if (it->first.substr(0,4) == "DFCM") {
+            isDFCMPredictorsPresent = true;
+            string order = it->first.substr(4,1);
+            dfcmOrderMap.insert(make_pair(order, it->second));
+            totalDFCMPredictors += it->second;
         }
 
     }
     if(isFCMPredictorsPresent){
         id = getFCMPredictors(predictors,id,cfg->getFields()[i]->iL2,fcmOrderMap);
+    }
+    if(isDFCMPredictorsPresent){
+        id = getDFCMPredictors(predictors,id,cfg->getFields()[i]->iL2,dfcmOrderMap);
     }
 
     return predictors;
@@ -113,6 +128,37 @@ int VPC3::getFCMPredictors(Predictor<T> *predictors[],int id, int const hashTabl
             FCMPredictor<T> *f = new FCMPredictor<T>();
             f->initialise(firstLevelTable, secondLevelTable, hashTableSize, maxOrder, stoi(it->first), recent[z], id);
             predictors[id++] = f;
+        }
+    }
+    return id;
+
+}
+
+template <typename T>
+int VPC3::getDFCMPredictors(Predictor<T> *predictors[],int id, int const hashTableSize,map<string, int> dfcmOrderMap){
+
+    int  maxOrder = 3;
+    char recent[] = {'a','b'};
+    T *secondLevelTable[hashTableSize];
+
+    for (T i = 0; i < hashTableSize; i++) {
+        secondLevelTable[i] = new T[2];
+        for (T j = 0; j < 2; j++) {
+            secondLevelTable[i][j] = 0;
+        }
+    }
+
+    int *firstLevelTable = new int[maxOrder+1];
+    for (int i = 0; i <=  maxOrder; i++) {
+        firstLevelTable[i] = 0;
+    }
+    map<string, int>::iterator it;
+    for (it = dfcmOrderMap.begin(); it != dfcmOrderMap.end(); it++) {
+        int countOfpredictor = it->second;
+        for (int z = 0; z < countOfpredictor; z++) {
+            DFCMPredictor<T> *d = new DFCMPredictor<T>();
+            d->initialise(firstLevelTable, secondLevelTable, hashTableSize, maxOrder, stoi(it->first), recent[z], id);
+            predictors[id++] = d;
         }
     }
     return id;
@@ -198,6 +244,7 @@ void VPC3::encode(ifstream& fstr,TraceConfig* cfg){
     }
 
 }
+
 template <typename T>
 T VPC3::encodePredictions(ifstream& fstr,TraceConfig* cfg, int i,int size,ofstream streams[]){
 
@@ -205,9 +252,15 @@ T VPC3::encodePredictions(ifstream& fstr,TraceConfig* cfg, int i,int size,ofstre
 
     int predictorId =    findCorrectPredictor<T>(data, cfg->getFields()[i]->totalPredictors,
                                                  (Predictor<T> **) predictorsListofLists[i]);
-
     //write in first stream
-    streams[2*i]<<predictorId;
+    if(predictorId > 9){
+        char encodedId = predictorId+'0';
+        streams[2*i]<<encodedId;
+    }
+    else
+        streams[2*i]<<predictorId;
+
+
 
     if(predictorId == cfg->getFields()[i]->totalPredictors){
         //write in second stream
