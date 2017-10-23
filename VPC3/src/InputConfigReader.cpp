@@ -3,7 +3,7 @@
 //
 
 #include "InputConfigReader.h"
-#include "main.h"
+#include "VPC3.h"
 
 int convertToInt(string data){ // RM: In case atoi or c_str not supported, write implementation here
     return atoi(data.c_str());
@@ -165,6 +165,24 @@ TraceConfig* parseFile(string fpath){
             if(first >=0 && last >= 0) {
                 string sID = lbuf.substr(first, last - first);
                 config->setID(sID);
+                IDfound = 1;
+            }
+        }else if(lbuf.find("Compressor = ") != string::npos){
+            int first = lbuf.find("'",1);
+            first+=1;
+            int last = lbuf.find("';",0);
+            if(first >=0 && last >= 0) {
+                string comp = lbuf.substr(first, last - first);
+                config->setCompressor(comp);
+                IDfound = 1;
+            }
+        }else if(lbuf.find("Decompressor = ") != string::npos){
+            int first = lbuf.find("'",1);
+            first+=1;
+            int last = lbuf.find("';",0);
+            if(first >=0 && last >= 0) {
+                string decomp = lbuf.substr(first, last - first);
+                config->setDecompressor(decomp);
                 IDfound = 1;
             }
         }

@@ -29,15 +29,21 @@ private:
     int iHeaderLen;
     vector<FieldInfo*> fields;
     string iID;
+    string compressor;
+    string decompressor;
 public:
     int ref();
     int unref();
     int setHeader(int h);
     int addField(FieldInfo* info);
     int setID(string ID);
+    int setCompressor(string comp);
+    int setDecompressor(string decomp);
 
     int getHeader();
     vector<FieldInfo*> getFields();
     string getID();
+    string getCompressor();
+    string getDecompressor();
 };
 #endif //VPC3_CONFIGURATION_H

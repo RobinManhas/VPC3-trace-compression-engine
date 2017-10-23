@@ -19,6 +19,15 @@ int TraceConfig::setID(string ID){
     iID = ID;
     return 0;
 }
+int TraceConfig::setCompressor(string comp){
+    compressor = comp;
+    return 0;
+}
+
+int TraceConfig::setDecompressor(string decomp){
+    decompressor = decomp;
+    return 0;
+}
 
 int TraceConfig::getHeader(){
     return iHeaderLen;
@@ -32,6 +41,14 @@ vector<FieldInfo*> TraceConfig::getFields(){
 string TraceConfig::getID(){
     return iID;
 }
+
+string TraceConfig::getCompressor(){
+    return compressor;
+}
+string TraceConfig::getDecompressor(){
+    return decompressor;
+}
+
 
 int TraceConfig::ref(){
     iRefCount+=1;

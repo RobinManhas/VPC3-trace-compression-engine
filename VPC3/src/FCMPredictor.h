@@ -5,7 +5,7 @@
 #ifndef NEW_FCMPREDICTOR_H
 #define NEW_FCMPREDICTOR_H
 
-#include "main.h"
+#include "VPC3.h"
 #include "Predictor.h"
 
 using namespace std;

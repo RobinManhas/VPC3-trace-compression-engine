@@ -4,6 +4,7 @@
 #include "zlib.h"
 
 using namespace std;
+
 typedef unsigned char BYTE;
 unsigned long file_size(char *filename)
 {
@@ -56,41 +57,28 @@ int compress_one_file(char *infilename, char *outfilename)
 
 
 int main() {
-    //robin:
-    char orig[150] = "/Users/shweta/Documents/Masters@StonyBrook/Fall2017/CSE506-OS/VPC3/src/testconfig.txt";
-    char orig2[150] = "/Users/shweta/Documents/Masters@StonyBrook/Fall2017/CSE506-OS/VPC3/src/testresconfig.txt";
-    char zipped[150] = "/Users/shweta/Documents/Masters@StonyBrook/Fall2017/CSE506-OS/VPC3/src/testconfig.zlib";
 
+    string cfg = "/Users/harsh/Documents/StonyBrook/FIrstSem/OS/Homework/OS_HW/VPC3/src/testconfig.txt";
 
-    TraceConfig* cfg = parseFile("/Users/shweta/Documents/Masters@StonyBrook/Fall2017/OS-CSE506/VPC3/src/testconfig.txt");
-
-    cout<<"end, ID: "<< cfg->getFields()[0]->iFieldLen; // just for test, use this by getting vector appropriately
-
-    //compress_one_file(orig,zipped);
-    //decompress_one_file(zipped,orig2);
-
-
-    FILE *file = fopen("/Users/shweta/Documents/Masters@StonyBrook/Fall2017/OS-CSE506/VPC3/cmake-build-debug/Test2.txt","r");
-    //ifstream fstr("/Users/shweta/Documents/Masters@StonyBrook/Fall2017/OS-CSE506/VPC3/cmake-build-debug/Test2.txt",std::ios::binary);
+    FILE *file = fopen("/Users/harsh/Documents/StonyBrook/FIrstSem/OS/Homework/OS_HW/VPC3/cmake-build-debug/test2.txt","r");
     if(!file) {
         cout << "Cannot open input file.\n";
         return 0;
     }
 
+
+    string output = "/Users/harsh/Documents/StonyBrook/FIrstSem/OS/Homework/OS_HW/VPC3/cmake-build-debug";
+
+    //COnfig file path location
+    //INput file location
+    //Output file destination
     VPC3 vpc3;
-
-
-    vpc3.encode(file,cfg);
+    vpc3.encode(file,cfg,output);
     fclose(file);
 
-//    int noOfFields = cfg->getFields().size();
-//    ifstream streams[2*noOfFields];
-//    for(int i = 0; i< 2*noOfFields; i++) {
-//        string suffix = "stream";
-//        suffix.append(1,i+'0');
-//        streams[i].open(suffix);
-//    }
-//    vpc3.decode(streams,cfg);
+    cout<<"ENcoding done"<<endl;
+    char * input = "/Users/harsh/Documents/StonyBrook/FIrstSem/OS/Homework/OS_HW/VPC3/cmake-build-debug/output.txt";
+    vpc3.decode(output,cfg,input);
 
     return 0;
 }
