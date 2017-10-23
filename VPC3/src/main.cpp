@@ -1,5 +1,4 @@
-#include <iostream>
-#include <fstream>
+
 #include "VPC3.h"
 #include "InputConfigReader.h"
 #include "zlib.h"
@@ -63,7 +62,7 @@ int main() {
     char zipped[150] = "/Users/shweta/Documents/Masters@StonyBrook/Fall2017/CSE506-OS/VPC3/src/testconfig.zlib";
 
 
-    TraceConfig* cfg = parseFile("/Users/shweta/Documents/Masters@StonyBrook/Fall2017/CSE506-OS/VPC3/src/testconfig.txt");
+    TraceConfig* cfg = parseFile("/Users/shweta/Documents/Masters@StonyBrook/Fall2017/OS-CSE506/VPC3/src/testconfig.txt");
 
     cout<<"end, ID: "<< cfg->getFields()[0]->iFieldLen; // just for test, use this by getting vector appropriately
 
@@ -71,9 +70,9 @@ int main() {
     //decompress_one_file(zipped,orig2);
 
 
-
-    ifstream fstr("/Users/shweta/Documents/Masters@StonyBrook/Fall2017/CSE506-OS/VPC3/cmake-build-debug/test.trace",std::ios::binary);
-    if(!fstr) {
+    FILE *file = fopen("/Users/shweta/Documents/Masters@StonyBrook/Fall2017/OS-CSE506/VPC3/cmake-build-debug/Test2.txt","r");
+    //ifstream fstr("/Users/shweta/Documents/Masters@StonyBrook/Fall2017/OS-CSE506/VPC3/cmake-build-debug/Test2.txt",std::ios::binary);
+    if(!file) {
         cout << "Cannot open input file.\n";
         return 0;
     }
@@ -81,16 +80,17 @@ int main() {
     VPC3 vpc3;
 
 
-    vpc3.encode(fstr,cfg);
+    vpc3.encode(file,cfg);
+    fclose(file);
 
-    int noOfFields = cfg->getFields().size();
-    ifstream streams[2*noOfFields];
-    for(int i = 0; i< 2*noOfFields; i++) {
-        string suffix = "stream";
-        suffix.append(1,i+'0');
-        streams[i].open(suffix);
-    }
-    vpc3.decode(streams,cfg);
+//    int noOfFields = cfg->getFields().size();
+//    ifstream streams[2*noOfFields];
+//    for(int i = 0; i< 2*noOfFields; i++) {
+//        string suffix = "stream";
+//        suffix.append(1,i+'0');
+//        streams[i].open(suffix);
+//    }
+//    vpc3.decode(streams,cfg);
 
     return 0;
 }

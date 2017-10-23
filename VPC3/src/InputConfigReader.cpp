@@ -151,7 +151,7 @@ TraceConfig* parseFile(string fpath){
                 f->mPredictorMap.insert(make_pair(LV, 4));
             }
 
-            f->iFieldLen = val;
+            f->iFieldLen = val/8;
             f->totalPredictors=totalPredictors;
             config->addField(f);
 

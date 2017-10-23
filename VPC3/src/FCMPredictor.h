@@ -12,21 +12,21 @@ using namespace std;
 template<class T>
 class FCMPredictor: public Predictor<T>{
 private:
-    unsigned int usageCount;
+    unsigned int usageCount=0;
     unsigned int order;
     unsigned int hashTableSize;
     int id;
-    char recent;
+    int recent;
     int maxOrder;
     int* firstLevelTable;
     T** secondLevelTable;//contains most recent value that followed the input , second recent
-    unsigned int getHashValue(unsigned int value);
+    unsigned long getHashValue(T value);
     static int updateFlag;
 
 public:
 
     void initialise(int* firstLevel, T** secondLevel,unsigned int hashTableSize,unsigned int maxOrder,
-                    unsigned int order,char recent,int id);
+                    unsigned int order,int recent,int id);
     T getPrediction();
     void update(const T newValue);
     int getUsageCount();
