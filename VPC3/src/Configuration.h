@@ -29,8 +29,8 @@ private:
     int iHeaderLen;
     vector<FieldInfo*> fields;
     string iID;
-    string compressor;
-    string decompressor;
+    string compressor="bzip2 -c -z -9";
+    string decompressor="bzip2 -c -d";
 public:
     int ref();
     int unref();

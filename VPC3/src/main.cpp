@@ -60,7 +60,7 @@ int main() {
 
     string cfg = "/Users/harsh/Documents/StonyBrook/FIrstSem/OS/Homework/OS_HW/VPC3/src/testconfig.txt";
 
-    FILE *file = fopen("/Users/harsh/Documents/StonyBrook/FIrstSem/OS/Homework/OS_HW/VPC3/cmake-build-debug/test2.txt","r");
+    FILE *file = fopen("/Users/harsh/Documents/StonyBrook/FIrstSem/OS/Homework/OS_HW/VPC3/cmake-build-debug/test.txt","r");
     if(!file) {
         cout << "Cannot open input file.\n";
         return 0;
