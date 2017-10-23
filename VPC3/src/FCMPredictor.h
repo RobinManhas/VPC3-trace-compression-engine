@@ -18,6 +18,7 @@ private:
     int id;
     int recent;
     int maxOrder;
+    int bits=-1;
     int* firstLevelTable;
     T** secondLevelTable;//contains most recent value that followed the input , second recent
     unsigned long getHashValue(T value);

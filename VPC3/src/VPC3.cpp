@@ -502,19 +502,20 @@ int VPC3::getFCMPredictors(Predictor<T> *predictors[],int id, int const hashTabl
     map<string, int>::iterator it;
     for (it = fcmOrderMap.begin(); it != fcmOrderMap.end(); it++) {
         int countOfpredictor = it->second;
+        int order = stoi(it->first)-1;
+
+        unsigned long long size = hashTableSize * (1<<order);
+        T** secondLevelTable = new T*[size];
+
+        for (unsigned long long i = 0; i < size; i++) {
+            secondLevelTable[i] = new T[2];
+            secondLevelTable[i][0] = 0;
+            secondLevelTable[i][1] = 1;
+
+        }
         for (int z = 0; z < countOfpredictor; z++) {
-            unsigned long long size = hashTableSize * 4;
-            T** secondLevelTable = new T*[size];
-
-            for (unsigned long long i = 0; i < size; i++) {
-                secondLevelTable[i] = new T[2];
-                secondLevelTable[i][0] = 0;
-                secondLevelTable[i][1] = 1;
-
-            }
-
             FCMPredictor<T> *f = new FCMPredictor<T>();
-            f->initialise(firstLevelTable,secondLevelTable, hashTableSize, maxOrder, stoi(it->first), z, id);
+            f->initialise(firstLevelTable,secondLevelTable, hashTableSize, maxOrder, order, z, id);
             predictors[id++] = f;
         }
     }
@@ -543,9 +544,20 @@ int VPC3::getDFCMPredictors(Predictor<T> *predictors[],int id, int const hashTab
     map<string, int>::iterator it;
     for (it = dfcmOrderMap.begin(); it != dfcmOrderMap.end(); it++) {
         int countOfpredictor = it->second;
+        int order = stoi(it->first)-1;
+
+        unsigned long long size = hashTableSize * (1<<order);
+        T** secondLevelTable = new T*[size];
+
+        for (unsigned long long i = 0; i < size; i++) {
+            secondLevelTable[i] = new T[2];
+            secondLevelTable[i][0] = 0;
+            secondLevelTable[i][1] = 1;
+
+        }
         for (int z = 0; z < countOfpredictor; z++) {
             DFCMPredictor<T> *d = new DFCMPredictor<T>();
-            d->initialise(firstLevelTable, secondLevelTable, hashTableSize, maxOrder, stoi(it->first), recent[z], id);
+            d->initialise(firstLevelTable, secondLevelTable, hashTableSize, maxOrder, order, recent[z], id);
             predictors[id++] = d;
         }
     }
@@ -706,12 +718,12 @@ T VPC3::encodePredictions(TraceConfig* cfg, int i,int size,FILE** streams,char *
                                                  (Predictor<T> **) predictorsListofLists[i]);
     //write in first stream
     char encodedId = predictorId+'0';
-
-    stream_buffer[2*i][lengths[2*i]]=encodedId;
-    lengths[2*i] = lengths[2*i]+1;
-    if(lengths[2*i]==BUFFERSIZE){
-        fwrite(stream_buffer[2*i], sizeof(char), lengths[2*i], streams[2*i]);
-        lengths[2*i]=0;
+    int s = 2*i;
+    stream_buffer[s][lengths[s]++]=encodedId;
+    //lengths[s] = lengths[s]+1;
+    if(lengths[s]==BUFFERSIZE){
+        fwrite(stream_buffer[s], sizeof(char), lengths[s], streams[s]);
+        lengths[s]=0;
     }
 
 
@@ -720,11 +732,11 @@ T VPC3::encodePredictions(TraceConfig* cfg, int i,int size,FILE** streams,char *
         //write in second stream
         char * tmp = convertToChar<T>(data,size);
         for(j=0;j<size;j++){
-            stream_buffer[2*i+1][lengths[2*i+1]++]=tmp[j];
+            stream_buffer[s+1][lengths[s+1]++]=tmp[j];
         }
-        if(lengths[2*i+1]==BUFFERSIZE*size){
-            fwrite(stream_buffer[2*i+1], sizeof(char), lengths[2*i+1], streams[2*i+1]);
-            lengths[2*i+1]=0;
+        if(lengths[s+1]==BUFFERSIZE*size){
+            fwrite(stream_buffer[s+1], sizeof(char), lengths[s+1], streams[s+1]);
+            lengths[s+1]=0;
         }
 
     }

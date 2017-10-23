@@ -3,6 +3,7 @@
 //
 #include <iostream>
 #include "FCMPredictor.h"
+#include <math.h>
 
 using namespace std;
 
@@ -29,7 +30,6 @@ template<class T>
 
 unsigned long FCMPredictor<T>::getHashValue(T value){
     unsigned long hashValue = 0;
-    int bits = 17;
     while (value > 0) {
         hashValue ^= value;
         value = (unsigned long)value >> bits;
@@ -54,27 +54,37 @@ void FCMPredictor<T>::initialise(int* firstLevel, T** secondLevel,unsigned int p
     id= p_id;
     recent= p_recent;
     maxOrder = p_maxOrder;
+    unsigned int n = hashTableSize;
+    if(n&(n-1)){
+        bits=0;
+    }
+    while(n!=0){
+        bits++;
+        n=n>>1;
+    }
+    //bits = log2(hashTableSize);
 
 };
 
 template<class T>
 T FCMPredictor<T>::getPrediction(){
-    unsigned int index = firstLevelTable[order-1];
+    unsigned int index = firstLevelTable[order];
     T value = -1;
-    return secondLevelTable[index][recent];
+    value = secondLevelTable[index][recent];
+    return value;
 }
 
 template<class T>
 void FCMPredictor<T>::update(const T newValue)
 {
-    if(recent ==0) {
-        for (int i = 0; i < maxOrder; i += 2) {//need to change to maxorder
-            unsigned int index = firstLevelTable[i];
+    if(recent == 0) {
+        //for (int i = 0; i < maxOrder; i += 2) {//need to change to maxorder
+            unsigned int index = firstLevelTable[order];
             if (secondLevelTable[index][0] != newValue) {
                 secondLevelTable[index][1] = secondLevelTable[index][0];
                 secondLevelTable[index][0] = newValue;
             }
-        }
+        //}
     }
 
     if(updateFlag == 1){
