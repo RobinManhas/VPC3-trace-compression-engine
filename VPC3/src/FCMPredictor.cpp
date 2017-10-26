@@ -1,9 +1,8 @@
 //
 // Created by Shweta Sahu on 10/3/17.
 //
-#include <iostream>
+
 #include "FCMPredictor.h"
-#include <math.h>
 
 using namespace std;
 

@@ -6,7 +6,6 @@
 #define VPC3_DFCMPREDICTOR_H
 
 #include <stdio.h>
-#include "main.h"
 #include "Predictor.h"
 
 using namespace std;
