@@ -1,3 +1,0 @@
-/Users/shweta/Documents/Masters@StonyBrook/Fall2017/CSE506-OS/VPC3/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/shweta/Documents/Masters@StonyBrook/Fall2017/CSE506-OS/VPC3/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/shweta/Documents/Masters@StonyBrook/Fall2017/CSE506-OS/VPC3/cmake-build-debug/CMakeFiles/VPC3.dir
