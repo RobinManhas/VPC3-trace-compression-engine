@@ -7,28 +7,29 @@ using namespace std;
 
 
 int main() {
+    VPC3 vpc3;
 
-    string cfg = "/Users/shweta/Documents/Masters@StonyBrook/Fall2017/OS-CSE506/VPC3/src/testconfig.txt";
-
+    //Example one
+    //config file location
+    string cfg = "/Users/shweta/Documents/Masters@StonyBrook/Fall2017/OS-CSE506/VPC3/src/testconfig2.txt";
+    //input file
     FILE *file = fopen("/Users/shweta/Documents/Masters@StonyBrook/Fall2017/OS-CSE506/VPC3/cmake-build-debug/Test2.txt","r");
+    // location for output streams
+    string output = "/Users/shweta/Documents/Masters@StonyBrook/Fall2017/OS-CSE506/VPC3/cmake-build-debug";
     if(!file) {
         cout << "Cannot open input file.\n";
         return 0;
     }
 
-
-    string output = "/Users/shweta/Documents/Masters@StonyBrook/Fall2017/OS-CSE506/VPC3/cmake-build-debug";
-
-    //COnfig file path location
-    //INput file :FILE*
-    //Output file destination
-    VPC3 vpc3;
-    vpc3.encode(file,cfg,output);
+    // to compress
+    vpc3.compress(file, cfg, output);
     fclose(file);
 
-    cout<<"ENcoding done"<<endl;
+   // to decompress
+    //output file
     char * input = "/Users/shweta/Documents/Masters@StonyBrook/Fall2017/OS-CSE506/VPC3/cmake-build-debug/output.txt";
-    vpc3.decode(output,cfg,input);
+    vpc3.decompress(output, cfg, input);
+
 
     return 0;
 }

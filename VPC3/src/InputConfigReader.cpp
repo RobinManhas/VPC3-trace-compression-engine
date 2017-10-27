@@ -23,13 +23,13 @@ TraceConfig* parseFile(string fpath){
         if (lbuf.length() == 0){
             continue;
         }
-        cout << "Line: " <<lbuf <<endl;
+        //cout << "Line: " <<lbuf <<endl;
 
         // parse bit header
         if(lbuf.find("Header") != string::npos){
             int val = convertToInt(lbuf.substr(0,lbuf.find("-")));
             config->setHeader(val);
-            cout<<"Bit header found: "<<val<<endl;
+            //cout<<"Bit header found: "<<val<<endl;
         }
 
         // parse bit field
@@ -45,7 +45,7 @@ TraceConfig* parseFile(string fpath){
             int last = lbuf.find("=",0);
             if(first >=0 && last >= 0) {
                 int fieldID = convertToInt(lbuf.substr(first, last - first));
-                cout << "got FieldID: "<<fieldID<<endl;
+                //cout << "got FieldID: "<<fieldID<<endl;
                 f->iFieldID = fieldID;
             }
 
@@ -54,14 +54,14 @@ TraceConfig* parseFile(string fpath){
             last = lbuf.find(",",0);
             if(first >=0 && last >= 0){
                 string strNew = lbuf.substr (first,last-first);
-                cout << "got L1: "<<strNew<<endl;
+                //cout << "got L1: "<<strNew<<endl;
                 f->iL1 = convertToInt(strNew);
                 if(L1found == 0){
                     L1found = f->iL1;
                 }
             }
             else{
-                cout << "L1 values NOT FOUND"<<endl;
+                //cout << "L1 values NOT FOUND"<<endl;
                 // if l1 not found and we have a previous l1 value, l1 defaults to 32768, else l1 defaults to 1
                 if(L1found == 0)
                     f->iL1 = 1;
@@ -75,11 +75,11 @@ TraceConfig* parseFile(string fpath){
             last = lbuf.find(":",0);
             if(first >=0 && last >= 0){
             string strNew = lbuf.substr (first,last-first);
-            cout << "got L2: "<<strNew<<endl;
+            //cout << "got L2: "<<strNew<<endl;
             f->iL2 = convertToInt(strNew);
             }
             else{
-                cout << "L2 values NOT FOUND, default 65536"<<endl;
+                //cout << "L2 values NOT FOUND, default 65536"<<endl;
                 f->iL2 = 65536;
             }
 
@@ -110,7 +110,7 @@ TraceConfig* parseFile(string fpath){
 
                         f->mPredictorMap.insert(make_pair(name, value));
                         totalPredictors += value;
-                        cout <<"Predictor added to map,name: "<<name<<" ,val "<<value<<endl;
+                        //cout <<"Predictor added to map,name: "<<name<<" ,val "<<value<<endl;
                         predictorStr.erase(0,strNew.length()+1);
                         predictorFound = 1;
                         count++;
@@ -139,7 +139,7 @@ TraceConfig* parseFile(string fpath){
 
                     f->mPredictorMap.insert(make_pair(name, value));
                     totalPredictors += value;
-                    cout <<"Predictor added to map,name: "<<name<<" ,val "<<value<<endl;
+                    //cout <<"Predictor added to map,name: "<<name<<" ,val "<<value<<endl;
                     predictorStr.erase(0,strNew.length()+1);
                     predictorFound = 1;
                 }

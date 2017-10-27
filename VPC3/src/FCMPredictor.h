@@ -19,14 +19,14 @@ private:
     int recent;
     int maxOrder;
     int bits=-1;
-    int* firstLevelTable;
+    unsigned long* firstLevelTable;
     T** secondLevelTable;//contains most recent value that followed the input , second recent
     unsigned long getHashValue(T value);
     static int updateFlag;
 
 public:
 
-    void initialise(int* firstLevel, T** secondLevel,unsigned int hashTableSize,unsigned int maxOrder,
+    void initialise(unsigned long* firstLevel, T** secondLevel,unsigned int hashTableSize,unsigned int maxOrder,
                     unsigned int order,int recent,int id);
     T getPrediction();
     void update(const T newValue);

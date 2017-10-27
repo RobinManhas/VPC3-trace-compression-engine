@@ -1,0 +1,2 @@
+32-Bit Field 1 = {L2 = 131072:FCM1[2],FCM3[2]};
+64-Bit Field 2 = {L2 = 131072:LV[4],FCM3[2]};

@@ -29,7 +29,7 @@ unsigned long DFCMPredictor<T>::getHashValue(T value){
 
 
 template<class T>
-void DFCMPredictor<T>::initialise(int* firstLevel, T** secondLevel,unsigned int p_hashTableSize,unsigned int p_maxOrder,
+void DFCMPredictor<T>::initialise(unsigned long* firstLevel, T** secondLevel,unsigned int p_hashTableSize,unsigned int p_maxOrder,
                                  unsigned int p_order,int p_recent,int p_id){
     //firsttable, secondtable,hashtablesize,maxorder,order,recent,id,
     //cout<<"\n initialise: "<<p_hashTableSize<<"\t"<<p_maxOrder<<"\t"<<p_order<<"\t"<<p_recent<<"\t"<<p_id;
@@ -48,14 +48,13 @@ void DFCMPredictor<T>::initialise(int* firstLevel, T** secondLevel,unsigned int 
         bits++;
         n=n>>1;
     }
+    usageCount = 0;
 };
 
 template<class T>
 T DFCMPredictor<T>::getPrediction(){
-    unsigned int index = firstLevelTable[order];
-    T value = -1;
-    value =  secondLevelTable[index][recent]+firstLevelTable[0];
-    return value;
+    unsigned long index = firstLevelTable[order];
+    return (secondLevelTable[index][recent]+firstLevelTable[0]);
 }
 
 template<class T>

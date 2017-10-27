@@ -106,7 +106,7 @@ int VPC3::getFCMPredictors(Predictor<T> *predictors[],int id, int const hashTabl
     int  maxOrder = 3; // to be processed;
     //char recent[] = {'a','b'};
 
-    int *firstLevelTable = new int[maxOrder];
+    unsigned long *firstLevelTable = new unsigned long[maxOrder];
     for (int i = 0; i < maxOrder; i++) {
         firstLevelTable[i] = 0;
     }
@@ -148,7 +148,7 @@ int VPC3::getDFCMPredictors(Predictor<T> *predictors[],int id, int const hashTab
         }
     }
 
-    int *firstLevelTable = new int[maxOrder+1];
+    unsigned long *firstLevelTable = new unsigned long[maxOrder+1];
     for (int i = 0; i <=  maxOrder; i++) {
         firstLevelTable[i] = 0;
     }
@@ -178,9 +178,9 @@ int VPC3::getDFCMPredictors(Predictor<T> *predictors[],int id, int const hashTab
 
 template<typename T>
 void VPC3::updatePredictors(Predictor<T>* predictors[],T value, int totalPred){
-    //flag set
-    FCMPredictor<T>::setUpdateFlag();
-    for( int index=0; index < totalPred; index++) {
+    for( int index=totalPred-1; index >= 0; index--) {
+        if(index==0)
+            FCMPredictor<T>::setUpdateFlag();//flag set
         predictors[index]->update(value);
     }
 
@@ -222,11 +222,11 @@ int VPC3::findCorrectPredictor(const T value,Predictor<T>* predictors[],int tota
  * *********************************   ENCODING  START ******************************************************
  */
 
-void VPC3::encode(FILE* input_file,string cfgFile,string output_path){
+int VPC3::compress(FILE *input_file, string cfgFile, string output_path){
     TraceConfig* cfg = parseFile(cfgFile);
-    if(input_file==NULL){
-        cout<<"Input File is null"<<endl;
-        return;
+    if(cfg == NULL || input_file==NULL || output_path == ""){
+        cout<<"Input is null"<<endl;
+        return -1;
     }
     //predictors initialisation
     preparePredictors(cfg);
@@ -263,7 +263,7 @@ void VPC3::encode(FILE* input_file,string cfgFile,string output_path){
     buffer = new char[buffer_size];
 
 
-
+    cout<<"Compression started.."<<endl;
     int readCOunt =0;
     readCOunt = fread(buffer,1,buffer_size,input_file);
     do {
@@ -294,6 +294,8 @@ void VPC3::encode(FILE* input_file,string cfgFile,string output_path){
         }
         pclose(output_streams[i]);
     }
+    cout<<"Compression done successfully"<<endl;
+    return 0;
 
 }
 
@@ -344,8 +346,12 @@ T VPC3::encodePredictions(int i,int size,FILE** output_streams){
  *  * *********************************   DECODING  START ******************************************************
  */
 
-void VPC3::decode(string input,string cfgFile,char * output_file){
+int VPC3::decompress(string input, string cfgFile, char *output_file){
     TraceConfig* cfg = parseFile(cfgFile);
+    if(cfg == NULL || input == "" || output_file == NULL){
+        cout<<"Input is null"<<endl;
+        return -1;
+    }
     preparePredictors(cfg);
     FILE* output = fopen(output_file,"w");
     int noOfFields = cfg->getFields().size();
@@ -381,7 +387,7 @@ void VPC3::decode(string input,string cfgFile,char * output_file){
     }
     len=0;
     buffer = new char[BUFFERSIZE*buffer_size];
-
+    cout<<"Decompression started.."<<endl;
     do {
         for (int i = 0; i < noOfFields; i++) {
             int size = sizes[i];
@@ -409,6 +415,9 @@ void VPC3::decode(string input,string cfgFile,char * output_file){
         fwrite(buffer,1,len,output);
     }
     pclose(output);
+
+    cout<<"Decompression done successfully"<<endl;
+    return 0;
 
 }
 

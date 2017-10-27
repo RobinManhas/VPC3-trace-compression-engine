@@ -86,8 +86,17 @@ private:
     T decodePredictions(int i, int size,FILE** input_streams);
 
 public:
-    void encode(FILE* input_file,string cfgFile,string output_path);
-    void decode(string input,string cfgFile,char * output_file);
+    /// Function to encode and compress a file
+    /// \param input_file  FILE to encode and compress
+    /// \param cfgFile   configutaion file, where the type of input and predictors used etc. is defined
+    /// \param output_path location where compressed streams(stream0, stream1.... ) to be saved
+    int compress(FILE *input_file, string cfgFile, string output_path);
+
+    /// Function to decompress and decode the compressed streams (compression must be done using VPC3 itself)
+    /// \param path location where streams are stored, which has to be decompressed(where stream0, stream1.... are saved)
+    /// \param cfgFile configutaion file, where the type of input and predictors used etc. is defined
+    /// \param output_file the full filename where the output will be saved
+    int decompress(string path, string cfgFile, char *output_file);
 
 
 

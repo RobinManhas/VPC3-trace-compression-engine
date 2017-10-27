@@ -1,0 +1,39 @@
+This library is developed by below three team members:
+Shweta Sahu (111481846)
+Harsh Gupta (111470974)
+Robin Manhas (111463105)
+
+The library contains following two APIs.
+
+*********** Function to encode and compress a file
+/// \param input_file  FILE to encode and compress
+/// \param cfgFile   configutaion file, where the type of input and predictors used etc. is defined
+/// \param output_path location where compressed streams(stream0, stream1.... ) to be saved
+int compress(FILE *input_file, string cfgFile, string output_path);
+
+
+
+************Function to decompress and decode the compressed streams (compression must be done using VPC3 itself)
+/// \param path location where streams are stored, which has to be decompressed(where stream0, stream1.... are saved)
+/// \param cfgFile configutaion file, where the type of input and predictors used etc. is defined
+/// \param output_file the full filename where the output will be saved
+int decompress(string path, string cfgFile, char *output_file);
+
+The config file format is as below:
+<size>-Bit Field <Number> = {L2 = <secondlevelTable size>:<comma separated list of predictors;
+
+- each line in config file corresponds to a single field in input file
+
+
+example1:
+If input file contains single field of 64 bit each:
+
+64-Bit Field 1 = {L2 = 131072:FCM1[2],FCM3[2]};
+
+example 2:
+If input file contains entries comprising two fields, first of 32 bit and second of 64 bit
+32-Bit Field 1 = {L2 = 131072:FCM1[2],FCM3[2]};
+64-Bit Field 2 = {L2 = 131072:LV[4],FCM3[2]};
+
+main.cpp contains the sample code to use this library to compress and decompress files.
+

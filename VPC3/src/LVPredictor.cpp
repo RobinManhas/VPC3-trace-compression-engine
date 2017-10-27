@@ -9,6 +9,7 @@ void LVPredictor<T>::initialise(T* p_table,int p_size,int p_id){
     table = p_table;
     size = p_size;
     id = p_id;
+    usageCount = 0;
 
 }
 
