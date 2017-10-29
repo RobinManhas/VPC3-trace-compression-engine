@@ -22,7 +22,8 @@ private:
     unsigned long* firstLevelTable;
     T** secondLevelTable;//contains most recent value that followed the input , second recent
     unsigned long getHashValue(T value);
-    static int updateFlag;
+    static int fupdateCount;
+    static int fmaxRef;
 
 public:
 
@@ -33,7 +34,6 @@ public:
     int getUsageCount();
     void incrementUsageCount();
     int getPredictorId();
-    static void setUpdateFlag();
 };
 
 

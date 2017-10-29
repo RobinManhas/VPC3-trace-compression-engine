@@ -6,14 +6,10 @@
 
 using namespace std;
 
-
 template<class T>
-int DFCMPredictor<T>::updateFlag=0;
-
+int DFCMPredictor<T>::dupdateCount=0;
 template<class T>
-void DFCMPredictor<T>::setUpdateFlag(){
-    updateFlag = 1;
-}
+int DFCMPredictor<T>::dmaxRef=0;
 
 template<class T>
 unsigned long DFCMPredictor<T>::getHashValue(T value){
@@ -49,6 +45,7 @@ void DFCMPredictor<T>::initialise(unsigned long* firstLevel, T** secondLevel,uns
         n=n>>1;
     }
     usageCount = 0;
+    dmaxRef++;
 };
 
 template<class T>
@@ -61,24 +58,24 @@ template<class T>
 void DFCMPredictor<T>::update(const T newValue)
 {
 
-
+    dupdateCount++;
     if(recent == 0) {
         unsigned int index = firstLevelTable[order];
         if (secondLevelTable[index][0] != (newValue - firstLevelTable[0])) {
             secondLevelTable[index][1] = secondLevelTable[index][0];
             secondLevelTable[index][0] = (newValue -firstLevelTable[0]);
         }
+
     }
 
-
-    if(updateFlag == 1){
+    if(dupdateCount == dmaxRef){
         unsigned long  hashValue = getHashValue(newValue - firstLevelTable[0]);
         for (int i = maxOrder; i > 1; i--) {
             firstLevelTable[i] = (firstLevelTable[i - 1]<< 1)^hashValue;
         }
         firstLevelTable[1] = hashValue;
         firstLevelTable[0] = newValue;
-        updateFlag = 0;
+        dupdateCount = 0;
     }
 
 

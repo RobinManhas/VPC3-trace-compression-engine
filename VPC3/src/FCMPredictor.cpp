@@ -8,25 +8,12 @@ using namespace std;
 
 
 template<class T>
-int FCMPredictor<T>::updateFlag=0;
+
+int FCMPredictor<T>::fupdateCount=0;
+template<class T>
+int FCMPredictor<T>::fmaxRef=0;
 
 template<class T>
-void FCMPredictor<T>::setUpdateFlag(){
-    updateFlag = 1;
-}
-
-template<class T>
-//unsigned long FCMPredictor<T>::getHashValue(T value) { // return type??
-//    unsigned long hashValue = 0;
-//    while (value > 0) {
-//        hashValue ^= value;
-//        value = value >> 17;
-//    }
-//    return (hashValue % hashTableSize);
-//}
-
-
-
 unsigned long FCMPredictor<T>::getHashValue(T value){
     unsigned long hashValue = 0;
     while (value > 0) {
@@ -61,6 +48,7 @@ void FCMPredictor<T>::initialise(unsigned long* firstLevel, T** secondLevel,unsi
         bits++;
         n=n>>1;
     }
+    fmaxRef++;
     //bits = log2(hashTableSize);
 
 };
@@ -84,13 +72,13 @@ void FCMPredictor<T>::update(const T newValue)
         //}
     }
 
-    if(updateFlag == 1){
+    if(fupdateCount == fmaxRef){
         unsigned long  hashValue = getHashValue(newValue);
         for (int i = 2; i > 0; i--) {
             firstLevelTable[i] = (firstLevelTable[i - 1]<< 1)^hashValue;
         }
         firstLevelTable[0] = hashValue;
-        updateFlag = 0;
+        fupdateCount = 0;
     }
 }
 

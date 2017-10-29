@@ -9,6 +9,9 @@
 #include "Predictor.h"
 
 using namespace std;
+
+
+
 template<class T>
 class DFCMPredictor: public Predictor<T>{
 private:
@@ -22,7 +25,8 @@ private:
     unsigned long* firstLevelTable;
     T** secondLevelTable;//contains most recent value that followed the input , second recent
     unsigned long getHashValue(T value);
-    static int updateFlag;
+    static int dupdateCount;
+    static int dmaxRef;
 
 public:
 
@@ -33,7 +37,6 @@ public:
     int getUsageCount();
     void incrementUsageCount();
     int getPredictorId();
-    static void setUpdateFlag();
 };
 
 

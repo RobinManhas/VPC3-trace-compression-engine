@@ -138,7 +138,6 @@ template <typename T>
 int VPC3::getDFCMPredictors(Predictor<T> *predictors[],int id, int const hashTableSize,map<string, int> dfcmOrderMap){
 
     int  maxOrder = 3;
-    char recent[] = {'a','b'};
     T *secondLevelTable[hashTableSize];
 
     for (T i = 0; i < hashTableSize; i++) {
@@ -179,10 +178,6 @@ int VPC3::getDFCMPredictors(Predictor<T> *predictors[],int id, int const hashTab
 template<typename T>
 void VPC3::updatePredictors(Predictor<T>* predictors[],T value, int totalPred){
     for( int index=totalPred-1; index >= 0; index--) {
-        if(index==0) {
-            FCMPredictor<T>::setUpdateFlag();//flag set
-            DFCMPredictor<T>::setUpdateFlag();
-        }
         predictors[index]->update(value);
     }
 
@@ -201,19 +196,13 @@ int VPC3::findCorrectPredictor(const T value,Predictor<T>* predictors[],int tota
         if((predictors[index]->getPrediction() == value) && (predictors[index]->getUsageCount() > usageCount)){
             predictorId = predictors[index]->getPredictorId();
             usageCount = predictors[index]->getUsageCount();
-            predictors[index]->incrementUsageCount();
+
         }
-        //Need to check for LVP
-//        else {
-//            predictors[index]->update(value);
-//        }
-
     }
-    //Added according to FCMP: update if no correct prediction
+    updatePredictors(predictors,value,totalPred);
+    if(predictorId!=totalPred)
+    predictors[predictorId]->incrementUsageCount();
 
-    //if(predictorId==noOfPredictors){
-        updatePredictors(predictors,value,totalPred);
-    //}
     return predictorId;
 }
 
