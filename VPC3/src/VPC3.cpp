@@ -302,7 +302,7 @@ T VPC3::encodePredictions(int i,int size,FILE** output_streams){
 
     int predictorId =    findCorrectPredictor<T>(data,(Predictor<T> **) predictorsListofLists[i],totalPredictors[i]);
     //write in first stream
-    char encodedId = predictorId+'0';
+    char encodedId = predictorId;
     int s = 2*i;
     stream_buffer[s][lengths[s]++]=encodedId;
     if(lengths[s]==BUFFERSIZE){
@@ -416,7 +416,7 @@ T VPC3::decodePredictions(int i,int size,FILE **input_streams) {
     T data;
     int i_tmp=2*i;
     int j=0;
-    int predictorId = stream_buffer[i_tmp][lengths[i_tmp]++]-'0';
+    int predictorId = stream_buffer[i_tmp][lengths[i_tmp]++];
     if(lengths[i_tmp]==BUFFERSIZE){
         j=fread(stream_buffer[i_tmp],1,BUFFERSIZE,input_streams[i_tmp]);
         if(i_tmp==0){
