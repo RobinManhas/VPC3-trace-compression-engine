@@ -58,7 +58,7 @@ int TraceConfig::ref(){
 int TraceConfig::unref(){ // RM: banker
     iRefCount-=1;
     if(iRefCount == 0){
-        cout << "Refcount for TraceConfig became 0, deleting input" << endl;
+        //cout << "Refcount for TraceConfig became 0, deleting input" << endl;
         vector<FieldInfo*>::iterator it;
         for(it = fields.begin(); it != fields.end(); it++){
             if(*it){

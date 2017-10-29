@@ -70,27 +70,18 @@ void DFCMPredictor<T>::update(const T newValue)
         }
     }
 
+
     if(updateFlag == 1){
-        unsigned int  hashValue = getHashValue(newValue);
-        unsigned int lastHashValue = getHashValue(firstLevelTable[0]);
+        unsigned long  hashValue = getHashValue(newValue - firstLevelTable[1]);
         for (int i = maxOrder; i > 1; i--) {
-            T tmp = firstLevelTable[i - 1];
-            firstLevelTable[i] = tmp -(T)lastHashValue;
+            firstLevelTable[i] = (firstLevelTable[i - 1]<< 1)^hashValue;
         }
-        firstLevelTable[1] = lastHashValue - (T)newValue;
+        firstLevelTable[1] = hashValue;
         firstLevelTable[0] = newValue;
         updateFlag = 0;
     }
 
-//    if(updateFlag == 1){
-//        unsigned int  hashValue = getHashValue(newValue);
-//        for (int i = maxOrder; i > 1; i--) {
-//            firstLevelTable[i] = ((firstLevelTable[i - 1]+firstLevelTable[0])^hashValue)-newValue;
-//        }
-//        firstLevelTable[1] = hashValue - newValue;
-//        firstLevelTable[0] = newValue;
-//        updateFlag = 0;
-//    }
+
 }
 
 template<class T>

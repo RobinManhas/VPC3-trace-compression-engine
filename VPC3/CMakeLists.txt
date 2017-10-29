@@ -4,19 +4,20 @@ project(VPC3)
 set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES
-        src/FCMPredictor.cpp
-        src/FCMPredictor.h
-        src/LVPredictor.cpp
-        src/LVPredictor.h
-        src/main.cpp
-        src/Predictor.h
-        src/VPC3.cpp
-        src/VPC3.h
         src/Configuration.cpp
         src/Configuration.h
+        src/DFCMPredictor.cpp
+        src/DFCMPredictor.h
+        src/FCMPredictor.cpp
+        src/FCMPredictor.h
         src/InputConfigReader.cpp
-        src/InputConfigReader.h 
-	src/DFCMPredictor.cpp 
-	src/DFCMPredictor.h)
+        src/InputConfigReader.h
+        src/LVPredictor.cpp
+        src/LVPredictor.h
+        src/Predictor.h
+        src/testconfig.txt
+        src/VPC3.cpp
+        src/VPC3.h
+        main.cpp)
 
 add_executable(VPC3 ${SOURCE_FILES})
