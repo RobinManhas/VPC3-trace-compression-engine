@@ -168,7 +168,7 @@ int VPC3::getDFCMPredictors(Predictor<T> *predictors[],int id, int const hashTab
         }
         for (int z = 0; z < countOfpredictor; z++) {
             DFCMPredictor<T> *d = new DFCMPredictor<T>();
-            d->initialise(firstLevelTable, secondLevelTable, hashTableSize, maxOrder, order, recent[z], id);
+            d->initialise(firstLevelTable, secondLevelTable, hashTableSize, maxOrder, order, z, id);
             predictors[id++] = d;
         }
     }
@@ -179,8 +179,10 @@ int VPC3::getDFCMPredictors(Predictor<T> *predictors[],int id, int const hashTab
 template<typename T>
 void VPC3::updatePredictors(Predictor<T>* predictors[],T value, int totalPred){
     for( int index=totalPred-1; index >= 0; index--) {
-        if(index==0)
+        if(index==0) {
             FCMPredictor<T>::setUpdateFlag();//flag set
+            DFCMPredictor<T>::setUpdateFlag();
+        }
         predictors[index]->update(value);
     }
 

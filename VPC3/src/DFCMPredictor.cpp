@@ -35,7 +35,7 @@ void DFCMPredictor<T>::initialise(unsigned long* firstLevel, T** secondLevel,uns
     //cout<<"\n initialise: "<<p_hashTableSize<<"\t"<<p_maxOrder<<"\t"<<p_order<<"\t"<<p_recent<<"\t"<<p_id;
     firstLevelTable= firstLevel;
     secondLevelTable  = secondLevel;
-    order = p_order;
+    order = p_order+1;
     hashTableSize = p_hashTableSize;
     id= p_id;
     recent= p_recent;
@@ -72,7 +72,7 @@ void DFCMPredictor<T>::update(const T newValue)
 
 
     if(updateFlag == 1){
-        unsigned long  hashValue = getHashValue(newValue - firstLevelTable[1]);
+        unsigned long  hashValue = getHashValue(newValue - firstLevelTable[0]);
         for (int i = maxOrder; i > 1; i--) {
             firstLevelTable[i] = (firstLevelTable[i - 1]<< 1)^hashValue;
         }

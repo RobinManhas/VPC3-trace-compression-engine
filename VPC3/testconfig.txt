@@ -1,1 +1,3 @@
-64-Bit Field 1 = {L2 = 131072:FCM1[2],FCM3[2]};
+64-Bit Field 1 = {L2 = 131072:FCM3[2],DFCM3[2]};
+Compressor = 'bzip2 -c -z -9';
+Decompressor = 'bzip2 -c -d';
