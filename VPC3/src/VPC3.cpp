@@ -193,10 +193,9 @@ int VPC3::findCorrectPredictor(const T value,Predictor<T>* predictors[],int tota
     int predictorId = totalPred;
     int usageCount = -1;
     for( int index=0; index < totalPred; index++){
-        if((predictors[index]->getPrediction() == value) && (predictors[index]->getUsageCount() > usageCount)){
+        if((predictors[index]->getUsageCount() > usageCount) && (predictors[index]->getPrediction() == value)){
             predictorId = predictors[index]->getPredictorId();
             usageCount = predictors[index]->getUsageCount();
-
         }
     }
     updatePredictors(predictors,value,totalPred);

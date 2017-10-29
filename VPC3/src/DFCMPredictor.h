@@ -25,8 +25,8 @@ private:
     unsigned long* firstLevelTable;
     T** secondLevelTable;//contains most recent value that followed the input , second recent
     unsigned long getHashValue(T value);
-    static int dupdateCount;
-    static int dmaxRef;
+    static int updateCount;
+    static int maxRef;
 
 public:
 

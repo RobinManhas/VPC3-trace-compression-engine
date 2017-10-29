@@ -9,9 +9,9 @@ using namespace std;
 
 template<class T>
 
-int FCMPredictor<T>::fupdateCount=0;
+int FCMPredictor<T>::updateCount=0;
 template<class T>
-int FCMPredictor<T>::fmaxRef=0;
+int FCMPredictor<T>::maxRef=0;
 
 template<class T>
 unsigned long FCMPredictor<T>::getHashValue(T value){
@@ -48,7 +48,7 @@ void FCMPredictor<T>::initialise(unsigned long* firstLevel, T** secondLevel,unsi
         bits++;
         n=n>>1;
     }
-    fmaxRef++;
+    maxRef++;
     //bits = log2(hashTableSize);
 
 };
@@ -62,6 +62,7 @@ T FCMPredictor<T>::getPrediction(){
 template<class T>
 void FCMPredictor<T>::update(const T newValue)
 {
+    updateCount++;
     if(recent == 0) {
         //for (int i = 0; i < maxOrder; i += 2) {//need to change to maxorder
             unsigned long index = firstLevelTable[order];
@@ -72,13 +73,13 @@ void FCMPredictor<T>::update(const T newValue)
         //}
     }
 
-    if(fupdateCount == fmaxRef){
+    if(updateCount == maxRef){
         unsigned long  hashValue = getHashValue(newValue);
         for (int i = 2; i > 0; i--) {
             firstLevelTable[i] = (firstLevelTable[i - 1]<< 1)^hashValue;
         }
         firstLevelTable[0] = hashValue;
-        fupdateCount = 0;
+        updateCount = 0;
     }
 }
 

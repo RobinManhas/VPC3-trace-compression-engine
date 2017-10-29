@@ -7,9 +7,9 @@
 using namespace std;
 
 template<class T>
-int DFCMPredictor<T>::dupdateCount=0;
+int DFCMPredictor<T>::updateCount=0;
 template<class T>
-int DFCMPredictor<T>::dmaxRef=0;
+int DFCMPredictor<T>::maxRef=0;
 
 template<class T>
 unsigned long DFCMPredictor<T>::getHashValue(T value){
@@ -45,7 +45,7 @@ void DFCMPredictor<T>::initialise(unsigned long* firstLevel, T** secondLevel,uns
         n=n>>1;
     }
     usageCount = 0;
-    dmaxRef++;
+    maxRef++;
 };
 
 template<class T>
@@ -58,7 +58,7 @@ template<class T>
 void DFCMPredictor<T>::update(const T newValue)
 {
 
-    dupdateCount++;
+    updateCount++;
     if(recent == 0) {
         unsigned int index = firstLevelTable[order];
         if (secondLevelTable[index][0] != (newValue - firstLevelTable[0])) {
@@ -68,14 +68,14 @@ void DFCMPredictor<T>::update(const T newValue)
 
     }
 
-    if(dupdateCount == dmaxRef){
+    if(updateCount == maxRef){
         unsigned long  hashValue = getHashValue(newValue - firstLevelTable[0]);
         for (int i = maxOrder; i > 1; i--) {
             firstLevelTable[i] = (firstLevelTable[i - 1]<< 1)^hashValue;
         }
         firstLevelTable[1] = hashValue;
         firstLevelTable[0] = newValue;
-        dupdateCount = 0;
+        updateCount = 0;
     }
 
 
