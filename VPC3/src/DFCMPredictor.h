@@ -26,12 +26,12 @@ private:
     T** secondLevelTable;//contains most recent value that followed the input , second recent
     unsigned long getHashValue(T value);
     static int updateCount;
-    static int maxRef;
+    int maxRef;
 
 public:
 
     void initialise(unsigned long* firstLevel, T** secondLevel,unsigned int hashTableSize,unsigned int maxOrder,
-                    unsigned int order,int recent,int id);
+                    unsigned int order,int recent,int id, int p_maxRef);
     T getPrediction();
     void update(const T newValue);
     int getUsageCount();

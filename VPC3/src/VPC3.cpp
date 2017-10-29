@@ -126,7 +126,7 @@ int VPC3::getFCMPredictors(Predictor<T> *predictors[],int id, int const hashTabl
         }
         for (int z = 0; z < countOfpredictor; z++) {
             FCMPredictor<T> *f = new FCMPredictor<T>();
-            f->initialise(firstLevelTable,secondLevelTable, hashTableSize, maxOrder, order, z, id);
+            f->initialise(firstLevelTable,secondLevelTable, hashTableSize, maxOrder, order, z, id,countOfpredictor);
             predictors[id++] = f;
         }
     }
@@ -167,7 +167,7 @@ int VPC3::getDFCMPredictors(Predictor<T> *predictors[],int id, int const hashTab
         }
         for (int z = 0; z < countOfpredictor; z++) {
             DFCMPredictor<T> *d = new DFCMPredictor<T>();
-            d->initialise(firstLevelTable, secondLevelTable, hashTableSize, maxOrder, order, z, id);
+            d->initialise(firstLevelTable, secondLevelTable, hashTableSize, maxOrder, order, z, id,countOfpredictor);
             predictors[id++] = d;
         }
     }

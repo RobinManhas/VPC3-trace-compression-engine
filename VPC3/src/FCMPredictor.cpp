@@ -8,10 +8,8 @@ using namespace std;
 
 
 template<class T>
-
 int FCMPredictor<T>::updateCount=0;
-template<class T>
-int FCMPredictor<T>::maxRef=0;
+
 
 template<class T>
 unsigned long FCMPredictor<T>::getHashValue(T value){
@@ -29,7 +27,7 @@ unsigned long FCMPredictor<T>::getHashValue(T value){
 
 template<class T>
 void FCMPredictor<T>::initialise(unsigned long* firstLevel, T** secondLevel,unsigned int p_hashTableSize,unsigned int p_maxOrder,
-                              unsigned int p_order,int p_recent,int p_id){
+                              unsigned int p_order,int p_recent,int p_id, int p_maxRef){
     //firsttable, secondtable,hashtablesize,maxorder,order,recent,id,
 	//cout<<"\n initialise: "<<p_hashTableSize<<"\t"<<p_maxOrder<<"\t"<<p_order<<"\t"<<p_recent<<"\t"<<p_id;
 
@@ -48,7 +46,7 @@ void FCMPredictor<T>::initialise(unsigned long* firstLevel, T** secondLevel,unsi
         bits++;
         n=n>>1;
     }
-    maxRef++;
+    maxRef = p_maxRef;
     //bits = log2(hashTableSize);
 
 };
@@ -56,7 +54,8 @@ void FCMPredictor<T>::initialise(unsigned long* firstLevel, T** secondLevel,unsi
 template<class T>
 T FCMPredictor<T>::getPrediction(){
     unsigned long index = firstLevelTable[order];
-    return secondLevelTable[index][recent];
+    T tmp = secondLevelTable[index][recent];
+    return tmp;
 }
 
 template<class T>
